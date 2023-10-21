@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 )
 
 func readConfig(file string) *map[string]interface{} {
@@ -13,6 +14,18 @@ func readConfig(file string) *map[string]interface{} {
 	} else {
 		return readConfigFile(file)
 	}
+}
+
+func mergeEnv(config *map[string]interface{}) *map[string]interface{} {
+	env := make(map[string]interface{})
+	for _, envStr := range os.Environ() {
+		ret := strings.SplitN(envStr, "=", 1)
+		if len(ret) == 2 {
+			env[ret[0]] = ret[1]
+		}
+	}
+	(*config)["env"] = env
+	return config
 }
 
 func readConfigPipe() *map[string]interface{} {
