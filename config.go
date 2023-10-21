@@ -16,7 +16,7 @@ func readConfig(file string) *map[string]interface{} {
 	}
 }
 
-func mergeEnv(config *map[string]interface{}) *map[string]interface{} {
+func mergeWithEnv(config *map[string]interface{}) *map[string]interface{} {
 	env := make(map[string]interface{})
 	for _, envStr := range os.Environ() {
 		ret := strings.SplitN(envStr, "=", 1)
@@ -29,7 +29,7 @@ func mergeEnv(config *map[string]interface{}) *map[string]interface{} {
 }
 
 func readConfigPipe() *map[string]interface{} {
-	var config map[string]interface{}
+	config := make(map[string]interface{})
 	defer os.Stdin.Close()
 	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {

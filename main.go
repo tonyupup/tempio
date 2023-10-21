@@ -33,7 +33,7 @@ func main() {
 	_, err := os.Stat(*templateFile)
 
 	// Get config
-	config = mergeEnv(readConfig(*configFile))
+	config = mergeWithEnv(readConfig(*configFile))
 
 	// create & write corefile
 	data := renderTemplateFile(config, *templateFile, err != nil)
