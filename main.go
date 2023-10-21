@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 var TempioVersion string
@@ -12,7 +13,7 @@ var TempioVersion string
 func main() {
 	var config *map[string]interface{}
 	configFile := flag.String("conf", "", "Config json file, can be omitted if used in a pipe")
-	templateFile := flag.String("template", "", "Template file")
+	templateFile := flag.String("template", "", "Template file or string")
 	outFile := flag.String("out", "", "Output file, if not defined output will be to console")
 
 	flag.Usage = func() {
@@ -23,18 +24,19 @@ func main() {
 
 		flag.PrintDefaults()
 	}
-
 	// parse command lines
 	flag.Parse()
 	if *templateFile == "" {
 		log.Fatal("Missing template argument")
 	}
 
+	_, err := os.Stat(*templateFile)
+
 	// Get config
-	config = readConfig(*configFile)
+	config = mergeEnv(readConfig(*configFile))
 
 	// create & write corefile
-	data := renderTemplateFile(config, *templateFile)
+	data := renderTemplateFile(config, *templateFile, err != nil)
 	if *outFile == "" {
 		fmt.Println(string(data))
 	} else {

@@ -9,11 +9,19 @@ import (
 	sprig "github.com/Masterminds/sprig/v3"
 )
 
-func renderTemplateFile(config *map[string]interface{}, file string) []byte {
-	// read Template
-	templateFile, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Fatalf("Cant read template file %s - %s", file, err)
+func renderTemplateFile(config *map[string]interface{}, file string, isStr bool) []byte {
+	var (
+		templateFile []byte
+		err          error
+	)
+	if isStr {
+		templateFile = []byte(file)
+	} else {
+		// read Template
+		templateFile, err = ioutil.ReadFile(file)
+		if err != nil {
+			log.Fatalf("Cant read template file %s - %s", file, err)
+		}
 	}
 
 	return renderTemplateBuffer(config, templateFile)
