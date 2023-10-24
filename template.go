@@ -9,7 +9,7 @@ import (
 	sprig "github.com/Masterminds/sprig/v3"
 )
 
-func renderTemplateFile(config *map[string]interface{}, file string, isStr bool) []byte {
+func renderTemplateFile(config map[string]interface{}, file string, isStr bool) []byte {
 	var (
 		templateFile []byte
 		err          error
@@ -27,7 +27,7 @@ func renderTemplateFile(config *map[string]interface{}, file string, isStr bool)
 	return renderTemplateBuffer(config, templateFile)
 }
 
-func renderTemplateBuffer(config *map[string]interface{}, templateData []byte) []byte {
+func renderTemplateBuffer(config map[string]interface{}, templateData []byte) []byte {
 	buf := &bytes.Buffer{}
 
 	// generate template
@@ -35,7 +35,7 @@ func renderTemplateBuffer(config *map[string]interface{}, templateData []byte) [
 	template.Must(coreTemplate.Parse(string(templateData)))
 
 	// render
-	err := coreTemplate.Execute(buf, *config)
+	err := coreTemplate.Execute(buf, config)
 	if err != nil {
 		log.Fatal(err)
 	}

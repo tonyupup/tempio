@@ -11,7 +11,7 @@ import (
 var TempioVersion string
 
 func main() {
-	var config *map[string]interface{}
+	var config map[string]interface{}
 	configFile := flag.String("conf", "", "Config json file, can be omitted if used in a pipe")
 	templateFile := flag.String("template", "", "Template file or string")
 	outFile := flag.String("out", "", "Output file, if not defined output will be to console")
