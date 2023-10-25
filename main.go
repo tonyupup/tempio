@@ -36,7 +36,7 @@ func main() {
 	// Get config
 	config = mergeWithEnv(readConfig(*configFile))
 
-	if templateSchemaFile != nil {
+	if *templateSchemaFile != "" {
 		if err = validateJSONVaule(readConfigFile(*templateSchemaFile), config); err != nil {
 			log.Fatal(err)
 		}
