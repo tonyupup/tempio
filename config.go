@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/xeipuuv/gojsonschema"
 )
 
 func readConfig(file string) map[string]interface{} {
@@ -42,7 +44,7 @@ func readConfigPipe() map[string]interface{} {
 }
 
 func readConfigFile(file string) map[string]interface{} {
-	configFile, err := ioutil.ReadFile(file)
+	configFile, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,4 +63,22 @@ func readConfigBuffer(buffer []byte) map[string]interface{} {
 	}
 
 	return config
+}
+
+func validateJSONVaule(schema map[string]any, json map[string]any) error {
+	schem, err := gojsonschema.NewSchema(gojsonschema.NewRawLoader(schema))
+	if err != nil {
+		return err
+	}
+	value := gojsonschema.NewRawLoader(json)
+
+	ret, err := schem.Validate(value)
+	if err != nil {
+		return err
+	}
+
+	if !ret.Valid() {
+		return fmt.Errorf("%+v", ret.Errors())
+	}
+	return nil
 }

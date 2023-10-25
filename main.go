@@ -15,6 +15,7 @@ func main() {
 	configFile := flag.String("conf", "", "Config json file, can be omitted if used in a pipe")
 	templateFile := flag.String("template", "", "Template file or string")
 	outFile := flag.String("out", "", "Output file, if not defined output will be to console")
+	templateSchemaFile := flag.String("schema", "", "Json schema file can use validate template vaule")
 
 	flag.Usage = func() {
 		writer := flag.CommandLine.Output()
@@ -35,6 +36,11 @@ func main() {
 	// Get config
 	config = mergeWithEnv(readConfig(*configFile))
 
+	if templateSchemaFile != nil {
+		if err = validateJSONVaule(readConfigFile(*templateSchemaFile), config); err != nil {
+			log.Fatal(err)
+		}
+	}
 	// create & write corefile
 	data := renderTemplateFile(config, *templateFile, err != nil)
 	if *outFile == "" {

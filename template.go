@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
+	"os"
 	"text/template"
 
 	sprig "github.com/Masterminds/sprig/v3"
@@ -18,7 +18,7 @@ func renderTemplateFile(config map[string]interface{}, file string, isStr bool) 
 		templateFile = []byte(file)
 	} else {
 		// read Template
-		templateFile, err = ioutil.ReadFile(file)
+		templateFile, err = os.ReadFile(file)
 		if err != nil {
 			log.Fatalf("Cant read template file %s - %s", file, err)
 		}
