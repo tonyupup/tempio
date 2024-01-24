@@ -38,7 +38,7 @@ jobs:
 
     - name: Build ${{ matrix.variant.name }}
       run: |
-        CGO_ENABLED=0 ${{ matrix.variant.args }} go build -ldflags="-s -w -X main.TempioVersion=${{ steps.version.outputs.version }}" -o "${{ matrix.variant.name }}"
+        CGO_ENABLED=0 ${{ matrix.variant.args }} go build -trimpath -ldflags="-s -w -X main.TempioVersion=${{ steps.version.outputs.version }}" -o "${{ matrix.variant.name }}"
 
     - name: Upload release asset
       if: github.event_name == 'release'
